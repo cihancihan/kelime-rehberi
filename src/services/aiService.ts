@@ -1,11 +1,22 @@
 import { GoogleGenAI } from '@google/genai';
+import { useSettingsStore } from '../hooks/useSettingsStore';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+let aiInstance: GoogleGenAI | null = null;
+let currentApiKey: string | null = null;
 
 export async function generateNewSentence(wordEn: string, wordTr: string): Promise<{ en: string, tr: string } | null> {
-  if (!process.env.GEMINI_API_KEY) {
-      console.error("Gemini API key is required");
+  const settingsKey = useSettingsStore.getState().apiKey;
+  const envKey = process.env.GEMINI_API_KEY;
+  const activeKey = settingsKey || envKey;
+
+  if (!activeKey) {
+      console.error("Gemini API key is required. Make sure to set it in settings or environment variables.");
       return null;
+  }
+  
+  if (!aiInstance || currentApiKey !== activeKey) {
+      aiInstance = new GoogleGenAI({ apiKey: activeKey });
+      currentApiKey = activeKey;
   }
   
   try {
@@ -19,7 +30,7 @@ export async function generateNewSentence(wordEn: string, wordTr: string): Promi
     Respond STRICTLY in JSON format without any markdown wrappers or markdown ticks.
     Format: {"en": "English sentence...", "tr": "Turkish sentence..."}`;
 
-    const response = await ai.models.generateContent({
+    const response = await aiInstance.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: prompt,
       config: {
