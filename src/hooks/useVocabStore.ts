@@ -24,7 +24,12 @@ export const useVocabStore = () => {
     const saved = localStorage.getItem('ielts_vocab_stats');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        return {
+          ...DEFAULT_STATS,
+          ...parsed,
+          wordRatings: parsed.wordRatings || {},
+        };
       } catch (e) {
         console.error('Failed to parse stats');
       }

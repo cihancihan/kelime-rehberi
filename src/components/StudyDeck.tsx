@@ -143,9 +143,9 @@ export function StudyDeck({ onFinish }: StudyDeckProps) {
 
             {/* BACK OF CARD */}
             {isFlipped && (
-              <div className="w-full h-full flex flex-col pt-8">
-                 <h2 className="text-4xl font-bold text-slate-800 mb-2">{currentWord.en}</h2>
-                 <p className="text-2xl text-indigo-600 font-medium mb-8">{currentWord.tr}</p>
+              <div className="w-full h-full flex flex-col pt-6 pb-2">
+                 <h2 className="text-3xl font-bold text-slate-800 mb-1">{currentWord.en}</h2>
+                 <p className="text-xl text-indigo-600 font-medium mb-4">{currentWord.tr}</p>
                  
                  <div className="flex-1 overflow-y-auto text-left space-y-4 px-4 w-full">
                      <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
@@ -179,20 +179,20 @@ export function StudyDeck({ onFinish }: StudyDeckProps) {
                  </div>
 
                  {/* RATING SYSTEM */}
-                 <div className="flex flex-col items-center mt-6 px-4">
-                    <p className="text-sm text-slate-500 mb-2 font-medium">Bu kelimeyi ne kadar iyi biliyorsun?</p>
+                 <div className="flex flex-row items-center justify-between mt-2 px-4 bg-slate-50 mx-4 rounded-xl py-2 border border-slate-100">
+                    <p className="text-xs text-slate-500 font-medium">Biliş Derecesi:</p>
                     <div className="flex space-x-1">
                         {[1, 2, 3, 4, 5].map(star => (
                             <button
                                key={star}
                                onClick={(e) => { e.stopPropagation(); rateWord(currentWord.id, star); }}
-                               className={`p-2 rounded-full transition-all hover:scale-110 ${
+                               className={`p-1 rounded-full transition-all hover:scale-110 ${
                                  (stats.wordRatings[currentWord.id] || 0) >= star 
                                     ? 'text-amber-400' 
                                     : 'text-slate-200 hover:text-amber-200'
                                }`}
                             >
-                                <Star className={`w-7 h-7 sm:w-8 sm:h-8 ${
+                                <Star className={`w-5 h-5 ${
                                   (stats.wordRatings[currentWord.id] || 0) >= star ? 'fill-current drop-shadow-sm' : ''
                                 }`} />
                             </button>
@@ -201,7 +201,7 @@ export function StudyDeck({ onFinish }: StudyDeckProps) {
                  </div>
 
                  {/* ACTION BUTTONS */}
-                 <div className="flex gap-4 mt-6 px-4 pb-4">
+                 <div className="flex gap-4 mt-4 px-4 pb-4">
                      <motion.button 
                         whileTap={{ scale: 0.95 }}
                         onClick={(e) => { e.stopPropagation(); handleNext(false); }}
